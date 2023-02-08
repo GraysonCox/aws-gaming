@@ -72,24 +72,13 @@ Resources:
       Tags:
         - Key: Name
           Value: !Ref AWS::StackName
-      UserData: !Base64 
-        'Fn::Join':
-          - ''
-          - - |
-              <script>
-            - 'cfn-init.exe -v -s '
-            - !Ref 'AWS::StackId'
-            - ' -r SteamMachine'
-            - ' --region '
-            - !Ref 'AWS::Region'
-            - |+
-
-            - 'cfn-signal.exe -e %ERRORLEVEL% '
-            - !Base64 
-              Ref: WaitHandle
-            - |+
-
-            - </script>
+      UserData:
+        Fn::Base64:
+          !Sub |
+            <script>
+            cfn-init.exe -v -s ${AWS::StackId} -r SteamMachine --region ${AWS::Region}
+            cfn-signal.exe -e %ERRORLEVEL% ${WaitHandle}
+            </script>
 
   WaitHandle:
     Type: AWS::CloudFormation::WaitConditionHandle
