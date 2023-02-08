@@ -59,6 +59,10 @@ Resources:
           commands:
             1_install_steam:
               command: C:\SteamSetup.exe /S
+            2_add_admin_user: # TODO: Better security. This is awful.
+              command: |
+                net user /add test test
+                net localgroup administrators test /add
           services:
             windows:
               cfn-hup:
