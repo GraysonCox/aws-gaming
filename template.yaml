@@ -43,37 +43,22 @@ Resources:
       AWS::CloudFormation::Init:
         config:
           files:
-            c:\cfn\cfn-hup.conf:
+            C:\cfn\cfn-hup.conf:
               content: !Sub |
                 [main]
                 stack=${AWS::StackId}
                 region=${AWS::Region}
-            c:\cfn\hooks.d\cfn-auto-reloader.conf:
+            C:\cfn\hooks.d\cfn-auto-reloader.conf:
               content: !Sub |
                 [cfn-auto-reloader-hook]
                 triggers=post.update
                 path=Resources.SteamMachine.Metadata.AWS::CloudFormation::Init
                 action=cfn-init.exe -v -s ${AWS::StackId} -r SteamMachine --region ${AWS::Region}
-            C:\Users\Public\Desktop\DisplayAdapter.bat:
-              content: |
-                takeown /f C:\Windows\System32\Drivers\BasicDisplay.sys
-                cacls C:\Windows\System32\Drivers\BasicDisplay.sys /G Administrators:F
-                del C:\Windows\System32\Drivers\BasicDisplay.sys
-            C:\Users\Public\Desktop\Startup.bat:
-              content: md Z:\SteamLibrary
-            C:\Users\Public\Desktop\FileExtensions.bat:
-              content: reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v HideFileExt /t REG_DWORD /d 0 /f
             C:\SteamSetup.exe:
               source: https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe
           commands:
-            1-Install Steam:
+            1_install_steam:
               command: 'C:\SteamSetup.exe /S'
-            2-Disable IE Enhanced Security:
-              command: REG ADD "HKLM\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}" /v IsInstalled /t REG_DWORD /d 00000000 /f
-            3-Disable Windows Firewall:
-              command: netsh advfirewall set allprofiles state off
-            4-Set Windows Audio to Automatic startup:
-              command: sc config AudioSrv start= auto
           services:
             windows:
               cfn-hup:
