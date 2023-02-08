@@ -5,14 +5,6 @@ Parameters:
     Type: AWS::EC2::Image::Id
   InstanceType:
     Type: String
-  # PublicIpAddress:
-  #   Type: String
-  #   AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
-  #   NoEcho: true
-  NewUsername:
-    Type: String
-  NewUsernamePassword:
-    Type: String
 
 Resources:
   LogGroup:
@@ -70,10 +62,7 @@ Resources:
             C:\Users\Public\Desktop\Startup.bat:
               content: md Z:\SteamLibrary
             C:\Users\Public\Desktop\FileExtensions.bat:
-              content: >-
-                reg add
-                HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-                /v HideFileExt /t REG_DWORD /d 0 /f
+              content: reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v HideFileExt /t REG_DWORD /d 0 /f
             C:\SteamSetup.exe:
               source: https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe
           commands:
@@ -85,16 +74,6 @@ Resources:
               command: netsh advfirewall set allprofiles state off
             4-Set Windows Audio to Automatic startup:
               command: sc config AudioSrv start= auto
-            5-Add New User:
-              command: !Sub net user ${NewUsername} ${NewUsername} /add
-            6-Add New User to Administrators:
-              command: !Sub net localgroup Administrators ${NewUsername} /add
-            7-Enable Auto Logon Username:
-              command: !Sub reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /f /v DefaultUserName /t REG_SZ /d ${NewUsername}
-            8-Enable Auto Logon Password:
-              command: !Sub reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /f /v DefaultPassword /t REG_SZ /d ${NewUsernamePassword}
-            9-Enable Auto Logon Final:
-              command: reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /f /v AutoAdminLogon /t REG_SZ /d 1
           services:
             windows:
               cfn-hup:

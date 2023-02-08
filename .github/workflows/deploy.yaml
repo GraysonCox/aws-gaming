@@ -40,7 +40,4 @@ jobs:
           sam deploy --parameter-overrides \
             WindowsAmi=ami-03cf1a25c0360a382 \
             InstanceType=t2.medium \
-            PublicIpAddress=63.152.40.180/32 \
-            NewUsername=test \
-            NewUsernamePassword=test
-
+            PublicIpAddress=63.152.40.180/32
