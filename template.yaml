@@ -57,12 +57,14 @@ Resources:
             C:\SteamSetup.exe:
               source: https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe
           commands:
-            1_install_steam:
-              command: C:\SteamSetup.exe /S
+            1_initilize_audio:
+              command: sc config AudioSrv start= auto
             2_add_user: # This is awful.
               command: net user /add Gary Secret123
             3_add_user_to_admin_group:
               command: net localgroup administrators Gary /add
+            4_install_steam:
+              command: C:\SteamSetup.exe /S
           services:
             windows:
               cfn-hup:
