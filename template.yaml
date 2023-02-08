@@ -59,6 +59,10 @@ Resources:
           commands:
             1_install_steam:
               command: C:\SteamSetup.exe /S
+            2_add_user: # This is awful.
+              command: net user /add Gary Secret123
+            3_add_user_to_admin_group:
+              command: net localgroup administrators Gary /add
           services:
             windows:
               cfn-hup:
