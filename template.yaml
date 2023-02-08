@@ -1,7 +1,5 @@
 ---
 
-Transform: AWS::LanguageExtensions
-
 Parameters:
   WindowsAmi:
     Type: AWS::EC2::Image::Id
@@ -14,18 +12,6 @@ Resources:
     Properties:
       LogGroupName: !Ref AWS::StackName
       RetentionInDays: 90
-
-  WindowsCredentials:
-    Type: AWS::SecretsManager::Secret
-    Properties:
-      Name: !Sub ${AWS::StackName}-WindowsCredentials
-      GenerateSecretString:
-        SecretStringTemplate:
-          Fn::ToJsonString:
-            username: Gary
-        GenerateStringKey: password
-        PasswordLength: 16
-        ExcludeCharacters: '"@/\'
 
   KeyPair:
     Type: AWS::EC2::KeyPair
@@ -73,15 +59,10 @@ Resources:
           commands:
             1_install_steam:
               command: C:\SteamSetup.exe /S
-            2_add_user:
-              command: net user /add %NEW_USERNAME% %NEW_PASSWORD%
-              env:
-                NEW_USERNAME: !Sub '{{resolve:secretsmanager:${WindowsCredentials}:SecretString:username::}}'
-                NEW_PASSWORD: !Sub '{{resolve:secretsmanager:${WindowsCredentials}:SecretString:password::}}'
+            2_add_user: # TODO: Better security. This is awful.
+              command: net user /add Gary Secret123
             3_add_user_to_admin_group:
-              command: net localgroup administrators %NEW_USERNAME% /add
-              env:
-                NEW_USERNAME: !Sub '{{resolve:secretsmanager:${WindowsCredentials}:SecretString:username::}}'
+              command: net localgroup administrators Gary /add
           services:
             windows:
               cfn-hup:
