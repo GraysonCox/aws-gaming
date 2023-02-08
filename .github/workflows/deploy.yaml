@@ -39,4 +39,4 @@ jobs:
         run: |
           sam deploy --parameter-overrides \
             WindowsAmi=ami-03cf1a25c0360a382 \
-            InstanceType=t2.medium
+            InstanceType=t3.large

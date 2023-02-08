@@ -43,17 +43,22 @@ Resources:
       AWS::CloudFormation::Init:
         config:
           files:
-            c:\cfn\cfn-hup.conf:
+            C:\cfn\cfn-hup.conf:
               content: !Sub |
                 [main]
                 stack=${AWS::StackId}
                 region=${AWS::Region}
-            c:\cfn\hooks.d\cfn-auto-reloader.conf:
+            C:\cfn\hooks.d\cfn-auto-reloader.conf:
               content: !Sub |
                 [cfn-auto-reloader-hook]
                 triggers=post.update
                 path=Resources.SteamMachine.Metadata.AWS::CloudFormation::Init
                 action=cfn-init.exe -v -s ${AWS::StackId} -r SteamMachine --region ${AWS::Region}
+            C:\SteamSetup.exe:
+              source: https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe
+          commands:
+            1_install_steam:
+              command: 'C:\SteamSetup.exe /S'
           services:
             windows:
               cfn-hup:
