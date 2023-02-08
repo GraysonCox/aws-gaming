@@ -74,18 +74,24 @@ Resources:
           Value: !Ref AWS::StackName
       UserData:
         Fn::Base64:
-          !Sub |
-            <script>
-            cfn-init.exe -v -s ${AWS::StackId} -r SteamMachine --region ${AWS::Region}
-            cfn-signal.exe -e %ERRORLEVEL% ${WaitHandle}
-            </script>
+          !Sub
+            - |
+              <script>
+              cfn-init.exe -v -s ${stack_id} -r SteamMachine --region ${region}
+              cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
+              </script>
+            - stack_id: !Ref AWS::StackId
+              region: !Ref AWS::Region
+              wait_condition_handle:
+                Fn::Base64:
+                  !Ref WaitConditionHandle
 
-  WaitHandle:
+  WaitConditionHandle:
     Type: AWS::CloudFormation::WaitConditionHandle
 
   WaitCondition:
     Type: AWS::CloudFormation::WaitCondition
     DependsOn: SteamMachine
     Properties:
-      Handle: !Ref WaitHandle
+      Handle: !Ref WaitConditionHandle
       Timeout: 3600
