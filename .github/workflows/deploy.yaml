@@ -38,5 +38,7 @@ jobs:
       - name: Deploy
         run: |
           sam deploy --parameter-overrides \
+            InstanceType=t3.large \
             WindowsAmi=ami-03cf1a25c0360a382 \
-            InstanceType=t3.large
+            WindowsUsername=Gary \
+            WindowsPassword=${{ secrets.WINDOWS_PASSWORD }}
