@@ -2,27 +2,53 @@ name: Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      deploy_little_jimmy:
+        type: boolean
+        default: false
+      deploy_jimmy:
+        type: boolean
+        default: false
+      deploy_big_jimmy:
+        type: boolean
+        default: false
 
 jobs:
   verify:
-    uses: ./.github/workflows/verify.yaml
+    uses: .github/workflows/verify.yaml
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: [verify]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: aws-actions/setup-sam@v2
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+  deploy_little_jimmy:
+    needs: verify
+    if: ${{ inputs.deploy_little_jimmy }}
+    name: Deploy Little Jimmy
+    uses: .github/workflows/reusable/sam_deploy.yaml
+    with:
+      stack_name: little-jimmy
+      region: us-east-1
+      instance_type: g4ad.xlarge
+      windows_username: Gary
+      windows_password: ${{ secrets.WINDOWS_PASSWORD }}
 
-      - name: Deploy
-        run: |
-          sam deploy --parameter-overrides \
-            InstanceType=g4ad.xlarge \
-            WindowsUsername=Gary \
-            WindowsPassword=${{ secrets.WINDOWS_PASSWORD }}
+  deploy_jimmy:
+    needs: verify
+    if: ${{ inputs.deploy_jimmy }}
+    name: Deploy Jimmy
+    uses: .github/workflows/reusable/sam_deploy.yaml
+    with:
+      stack_name: jimmy
+      region: us-east-1
+      instance_type: g4ad.xlarge
+      windows_username: Gary
+      windows_password: ${{ secrets.WINDOWS_PASSWORD }}
+
+  deploy_big_jimmy:
+    needs: verify
+    if: ${{ inputs.deploy_big_jimmy }}
+    name: Deploy Big Jimmy
+    uses: .github/workflows/reusable/sam_deploy.yaml
+    with:
+      stack_name: big-jimmy
+      region: us-east-1
+      instance_type: g4ad.4xlarge
+      windows_username: Gary
+      windows_password: ${{ secrets.WINDOWS_PASSWORD }}
