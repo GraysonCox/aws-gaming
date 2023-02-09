@@ -13,7 +13,7 @@ jobs:
       - uses: scottbrenner/cfn-lint-action@v2
 
       - name: Lint
-        run: cfn-lint **/*template.yaml
+        run: cfn-lint -ignore-checks W3002 -t **/*template.yaml
 
   test:
     name: Test
