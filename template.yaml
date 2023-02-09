@@ -59,12 +59,17 @@ Resources:
           commands:
             1_initilize_audio:
               command: sc config AudioSrv start= auto
+              waitAfterCompletion: 5
             2_add_user: # This is awful.
               command: net user /add Gary Secret123
+              waitAfterCompletion: 5
             3_add_user_to_admin_group:
               command: net localgroup administrators Gary /add
+              waitAfterCompletion: 5
             4_install_steam:
               command: C:\SteamSetup.exe /S
+            5_reboot:
+              command: shutdown -r -t 0
           services:
             windows:
               cfn-hup:
