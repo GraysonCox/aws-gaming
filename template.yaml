@@ -93,13 +93,11 @@ Resources:
         Fn::Base64:
           !Sub
             - |
-              <script>
-              cfn-init.exe -v -s ${stack_id} -r SteamMachine --region ${region}
-              cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
-              </script>
               <powershell>
               cmd.exe /c net user /add ${windows_username} ${windows_password}
               cmd.exe /c net localgroup administrators ${windows_username} /add
+              cmd.exe /c cfn-init.exe -v -s ${stack_id} -r SteamMachine --region ${region}
+              cmd.exe /c cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
               </powershell>
             - stack_id: !Ref AWS::StackId
               region: !Ref AWS::Region
