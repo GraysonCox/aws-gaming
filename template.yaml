@@ -70,6 +70,7 @@ Resources:
               command: C:\SteamSetup.exe /S
             5_reboot:
               command: shutdown -r -t 0
+              waitAfterCompletion: forever
           services:
             windows:
               cfn-hup:
