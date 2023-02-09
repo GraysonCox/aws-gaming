@@ -97,3 +97,7 @@ Resources:
     Properties:
       Handle: !Ref WaitConditionHandle
       Timeout: 3600
+
+Outputs:
+  Address:
+    Value: !GetAtt Ec2Instance.PublicDnsName
