@@ -1,10 +1,6 @@
 ---
 
 Parameters:
-  InstanceType:
-    Type: String
-  WindowsAmi:
-    Type: AWS::EC2::Image::Id
   WindowsUsername:
     Type: String
     NoEcho: true
@@ -38,81 +34,26 @@ Resources:
           ToPort: 3389
           CidrIp: 0.0.0.0/0 # This is bad.
 
-  ElasticIp:
-    Type: AWS::EC2::EIP
+  GameMachine1:
+    Type: AWS::CloudFormation::Stack
     Properties:
-      InstanceId: !Ref SteamMachine
+      TemplateURL: game-machine.template.yaml
+      Parameters:
+        Name: !Sub ${AWS::StackName}-1
+        InstanceType: t3.large
+        Username: !Ref WindowsUsername
+        Password: !Ref WindowsPassword
+        SecurityGroupId: !Ref SecurityGroup
+        KeyPairName: !Ref KeyPair
 
-  SteamMachine:
-    Type: AWS::EC2::Instance
-    Metadata:
-      AWS::CloudFormation::Init:
-        config:
-          files:
-            C:\cfn\cfn-hup.conf:
-              content: !Sub |
-                [main]
-                stack=${AWS::StackId}
-                region=${AWS::Region}
-            C:\cfn\hooks.d\cfn-auto-reloader.conf:
-              content: !Sub |
-                [cfn-auto-reloader-hook]
-                triggers=post.update
-                path=Resources.SteamMachine.Metadata.AWS::CloudFormation::Init
-                action=cfn-init.exe -v -s ${AWS::StackId} -r SteamMachine --region ${AWS::Region}
-            C:\SteamSetup.exe:
-              source: https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe
-          commands:
-            1_initilize_audio:
-              command: sc config AudioSrv start= auto
-              waitAfterCompletion: 5
-            2_install_steam:
-              command: C:\SteamSetup.exe /S
-            3_reboot:
-              command: shutdown -r -t 0
-              waitAfterCompletion: forever
-          services:
-            windows:
-              cfn-hup:
-                enabled: true
-                ensureRunning: true
-                files:
-                  - C:\cfn\cfn-hup.conf
-                  - C:\cfn\hooks.d\cfn-auto-reloader.conf
+  GameMachine2:
+    Type: AWS::CloudFormation::Stack
     Properties:
-      InstanceType: !Ref InstanceType
-      ImageId: !Ref WindowsAmi
-      SecurityGroups:
-        - !Ref SecurityGroup
-      KeyName: !Ref KeyPair
-      Monitoring: true
-      Tags:
-        - Key: Name
-          Value: !Ref AWS::StackName
-      UserData:
-        Fn::Base64:
-          !Sub
-            - |
-              <powershell>
-              cmd.exe /c net user /add ${windows_username} ${windows_password}
-              cmd.exe /c net localgroup administrators ${windows_username} /add
-              cmd.exe /c cfn-init.exe -v -s ${stack_id} -r SteamMachine --region ${region}
-              cmd.exe /c cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
-              </powershell>
-            - stack_id: !Ref AWS::StackId
-              region: !Ref AWS::Region
-              wait_condition_handle:
-                Fn::Base64:
-                  !Ref WaitConditionHandle
-              windows_username: !Ref WindowsUsername
-              windows_password: !Ref WindowsPassword
-
-  WaitConditionHandle:
-    Type: AWS::CloudFormation::WaitConditionHandle
-
-  WaitCondition:
-    Type: AWS::CloudFormation::WaitCondition
-    DependsOn: SteamMachine
-    Properties:
-      Handle: !Ref WaitConditionHandle
-      Timeout: 3600
+      TemplateURL: game-machine.template.yaml
+      Parameters:
+        Name: !Sub ${AWS::StackName}-2
+        InstanceType: t3.large
+        Username: !Ref WindowsUsername
+        Password: !Ref WindowsPassword
+        SecurityGroupId: !Ref SecurityGroup
+        KeyPairName: !Ref KeyPair

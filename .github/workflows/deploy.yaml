@@ -13,7 +13,7 @@ jobs:
       - uses: scottbrenner/cfn-lint-action@v2
 
       - name: Lint
-        run: cfn-lint **/template.yaml
+        run: cfn-lint **/*template.yaml
 
   test:
     name: Test
@@ -38,7 +38,5 @@ jobs:
       - name: Deploy
         run: |
           sam deploy --parameter-overrides \
-            InstanceType=t3.large \
-            WindowsAmi=ami-03cf1a25c0360a382 \
             WindowsUsername=Gary \
             WindowsPassword=${{ secrets.WINDOWS_PASSWORD }}
