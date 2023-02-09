@@ -1,10 +1,16 @@
 ---
 
 Parameters:
-  WindowsAmi:
-    Type: AWS::EC2::Image::Id
   InstanceType:
     Type: String
+  WindowsAmi:
+    Type: AWS::EC2::Image::Id
+  WindowsUsername:
+    Type: String
+    NoEcho: true
+  WindowsPassword:
+    Type: String
+    NoEcho: true
 
 Resources:
   LogGroup:
@@ -60,15 +66,9 @@ Resources:
             1_initilize_audio:
               command: sc config AudioSrv start= auto
               waitAfterCompletion: 5
-            2_add_user: # This is awful.
-              command: net user /add Gary Secret123
-              waitAfterCompletion: 5
-            3_add_user_to_admin_group:
-              command: net localgroup administrators Gary /add
-              waitAfterCompletion: 5
-            4_install_steam:
+            2_install_steam:
               command: C:\SteamSetup.exe /S
-            5_reboot:
+            3_reboot:
               command: shutdown -r -t 0
               waitAfterCompletion: forever
           services:
@@ -93,15 +93,19 @@ Resources:
         Fn::Base64:
           !Sub
             - |
-              <script>
-              cfn-init.exe -v -s ${stack_id} -r SteamMachine --region ${region}
-              cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
-              </script>
+              <powershell>
+              cmd.exe /c net user /add ${windows_username} ${windows_password}
+              cmd.exe /c net localgroup administrators ${windows_username} /add
+              cmd.exe /c cfn-init.exe -v -s ${stack_id} -r SteamMachine --region ${region}
+              cmd.exe /c cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
+              </powershell>
             - stack_id: !Ref AWS::StackId
               region: !Ref AWS::Region
               wait_condition_handle:
                 Fn::Base64:
                   !Ref WaitConditionHandle
+              windows_username: !Ref WindowsUsername
+              windows_password: !Ref WindowsPassword
 
   WaitConditionHandle:
     Type: AWS::CloudFormation::WaitConditionHandle
