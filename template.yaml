@@ -37,22 +37,10 @@ Resources:
   GameMachine1:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: game-machine.template.yaml
+      TemplateURL: sub_templates/game-machine.template.yaml
       Parameters:
-        Name: !Sub ${AWS::StackName}-1
-        InstanceType: t3.large
-        Username: !Ref WindowsUsername
-        Password: !Ref WindowsPassword
-        SecurityGroupId: !Ref SecurityGroup
-        KeyPairName: !Ref KeyPair
-
-  GameMachine2:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: game-machine.template.yaml
-      Parameters:
-        Name: !Sub ${AWS::StackName}-2
-        InstanceType: t3.large
+        Name: !Sub ${AWS::StackName}
+        InstanceType: g4ad.xlarge
         Username: !Ref WindowsUsername
         Password: !Ref WindowsPassword
         SecurityGroupId: !Ref SecurityGroup
