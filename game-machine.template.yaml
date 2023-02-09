@@ -1,0 +1,103 @@
+---
+
+Parameters:
+  Name:
+    Type: String
+  InstanceType:
+    Type: String
+    AllowedValues:
+      - t3.large
+  Username:
+    Type: String
+    NoEcho: true
+  Password:
+    Type: String
+    NoEcho: true
+  SecurityGroupId:
+    Type: String
+  KeyPairName:
+    Type: String
+
+Resources:
+  ElasticIp:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Ec2Instance
+
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          files:
+            C:\cfn\cfn-hup.conf:
+              content: !Sub |
+                [main]
+                stack=${AWS::StackId}
+                region=${AWS::Region}
+            C:\cfn\hooks.d\cfn-auto-reloader.conf:
+              content: !Sub |
+                [cfn-auto-reloader-hook]
+                triggers=post.update
+                path=Resources.Ec2Instance.Metadata.AWS::CloudFormation::Init
+                action=cfn-init.exe -v -s ${AWS::StackId} -r Ec2Instance --region ${AWS::Region}
+            C:\SteamSetup.exe:
+              source: https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe
+          commands:
+            1_initilize_audio:
+              command: sc config AudioSrv start= auto
+              waitAfterCompletion: 5
+            2_install_steam:
+              command: C:\SteamSetup.exe /S
+            3_reboot:
+              command: shutdown -r -t 0
+              waitAfterCompletion: forever
+          services:
+            windows:
+              cfn-hup:
+                enabled: true
+                ensureRunning: true
+                files:
+                  - C:\cfn\cfn-hup.conf
+                  - C:\cfn\hooks.d\cfn-auto-reloader.conf
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: ami-03cf1a25c0360a382
+      SecurityGroups:
+        - !Ref SecurityGroupId
+      KeyName: !Ref KeyPairName
+      Monitoring: true
+      Tags:
+        - Key: Name
+          Value: !Ref Name
+      UserData:
+        Fn::Base64:
+          !Sub
+            - |
+              <powershell>
+              cmd.exe /c net user /add ${username} ${password}
+              cmd.exe /c net localgroup administrators ${username} /add
+              cmd.exe /c cfn-init.exe -v -s ${stack_id} -r Ec2Instance --region ${region}
+              cmd.exe /c cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
+              </powershell>
+            - username: !Ref Username
+              password: !Ref Password
+              stack_id: !Ref AWS::StackId
+              region: !Ref AWS::Region
+              wait_condition_handle:
+                Fn::Base64:
+                  !Ref WaitConditionHandle
+
+  WaitConditionHandle:
+    Type: AWS::CloudFormation::WaitConditionHandle
+
+  WaitCondition:
+    Type: AWS::CloudFormation::WaitCondition
+    DependsOn: Ec2Instance
+    Properties:
+      Handle: !Ref WaitConditionHandle
+      Timeout: 3600
+
+Outputs:
+  Address:
+    Value: !GetAtt Ec2Instance.PublicDnsName
