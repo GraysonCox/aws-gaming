@@ -3,8 +3,6 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "aws-gaming"
-region = "us-east-1"
 capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND"
 tags = "project=aws-gaming"
 image_repositories = []

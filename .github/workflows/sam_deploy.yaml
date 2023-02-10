@@ -1,0 +1,45 @@
+name: SAM Deploy
+
+on:
+  workflow_call:
+    inputs:
+      stack_name:
+        type: string
+        required: true
+      instance_type:
+        type: string
+        required: true
+      windows_username:
+        type: string
+        required: true
+    secrets:
+      aws_access_key_id:
+        required: true
+      aws_secret_access_key:
+        required: true
+      aws_region:
+        required: true
+      windows_password:
+        required: true
+
+jobs:
+  deploy:
+    name: SAM Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/setup-sam@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.aws_access_key_id }}
+          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+          aws-region: ${{ secrets.aws_region }}
+
+      - run: |
+          sam deploy \
+            --stack-name ${{ inputs.stack_name }} \
+            --region ${{ secrets.aws_region }} \
+            --parameter-overrides \
+              InstanceType=${{ inputs.instance_type }} \
+              WindowsUsername=${{ inputs.windows_username }} \
+              WindowsPassword=${{ secrets.windows_password }}
