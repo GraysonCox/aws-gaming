@@ -1,0 +1,97 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      destroy_machine_1:
+        type: boolean
+        default: false
+      destroy_machine_2:
+        type: boolean
+        default: false
+      destroy_machine_3:
+        type: boolean
+        default: false
+      destroy_machine_4:
+        type: boolean
+        default: false
+      destroy_machine_5:
+        type: boolean
+        default: false
+      destroy_machine_6:
+        type: boolean
+        default: false
+      destroy_machine_7:
+        type: boolean
+        default: false
+      destroy_machine_8:
+        type: boolean
+        default: false
+
+jobs:
+  verify:
+    uses: ./.github/workflows/reusable_verify.yaml
+
+  destroy_machine_1:
+    needs: verify
+    if: ${{ inputs.destroy_machine_1 }}
+    uses: ./.github/workflows/reusable_destroy.yaml
+    with:
+      stack_name: machine_1
+    secrets: inherit
+
+  destroy_machine_2:
+    needs: verify
+    if: ${{ inputs.destroy_machine_2 }}
+    uses: ./.github/workflows/reusable_destroy.yaml
+    with:
+      stack_name: machine_2
+    secrets: inherit
+
+  destroy_machine_3:
+    needs: verify
+    if: ${{ inputs.destroy_machine_3 }}
+    uses: ./.github/workflows/reusable_destroy.yaml
+    with:
+      stack_name: machine_3
+    secrets: inherit
+
+  destroy_machine_4:
+    needs: verify
+    if: ${{ inputs.destroy_machine_4 }}
+    uses: ./.github/workflows/reusable_destroy.yaml
+    with:
+      stack_name: machine_4
+    secrets: inherit
+
+  destroy_machine_5:
+    needs: verify
+    if: ${{ inputs.destroy_machine_5 }}
+    uses: ./.github/workflows/reusable_destroy.yaml
+    with:
+      stack_name: machine_5
+    secrets: inherit
+
+  destroy_machine_6:
+    needs: verify
+    if: ${{ inputs.destroy_machine_6 }}
+    uses: ./.github/workflows/reusable_destroy.yaml
+    with:
+      stack_name: machine_6
+    secrets: inherit
+
+  destroy_machine_7:
+    needs: verify
+    if: ${{ inputs.destroy_machine_7 }}
+    uses: ./.github/workflows/reusable_destroy.yaml
+    with:
+      stack_name: machine_7
+    secrets: inherit
+
+  destroy_machine_8:
+    needs: verify
+    if: ${{ inputs.destroy_machine_8 }}
+    uses: ./.github/workflows/reusable_destroy.yaml
+    with:
+      stack_name: machine_8
+    secrets: inherit
