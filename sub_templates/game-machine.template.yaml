@@ -6,7 +6,11 @@ Parameters:
   InstanceType:
     Type: String
     AllowedValues:
-      - t3.large
+      - g4ad.xlarge
+      - g4ad.2xlarge
+      - g4ad.4xlarge
+      - g4ad.8xlarge
+      - g4ad.16xlarge
   Username:
     Type: String
     NoEcho: true
@@ -43,13 +47,35 @@ Resources:
                 action=cfn-init.exe -v -s ${AWS::StackId} -r Ec2Instance --region ${AWS::Region}
             C:\SteamSetup.exe:
               source: https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe
+          sources:
+            C:\NewDrivers: https://s3.amazonaws.com/ec2-amd-windows-drivers/latest/22.10.01.12-220930a-384126e-WHQLCert_.zip
           commands:
-            1_initilize_audio:
+            1_configure_windows_audio:
               command: sc config AudioSrv start= auto
-              waitAfterCompletion: 5
-            2_install_steam:
+              waitAfterCompletion: 0
+            2_install_display_drivers:
+              command: pnputil /add-driver C:\NewDrivers\Packages\Drivers\Display\WT6A_INF/*.inf /install
+            3_disable_default_display_adapter:
+              command: pnputil /disable-device "PCI\VEN_1D0F&DEV_1111&SUBSYS_00000000&REV_00\3&13C0B0C5&1&18"
+              waitAfterCompletion: 0
+            4_install_steam:
               command: C:\SteamSetup.exe /S
-            3_reboot:
+              waitAfterCompletion: 0
+            5_1_mount_ebs_volume:
+              command: powershell -command "Stop-Service -Name ShellHWDetection"
+              waitAfterCompletion: 0
+            5_2_mount_ebs_volume:
+              command: >
+                powershell -command "Get-Disk
+                | Where PartitionStyle -eq 'raw'
+                | Initialize-Disk -PartitionStyle MBR -PassThru
+                | New-Partition -AssignDriveLetter -UseMaximumSize
+                | Format-Volume -FileSystem NTFS -NewFileSystemLabel 'Volume Label' -Confirm:$false"
+              waitAfterCompletion: 0
+            5_3_mount_ebs_volume:
+              command: powershell -command "Start-Service -Name ShellHWDetection"
+              waitAfterCompletion: 0
+            6_reboot:
               command: shutdown -r -t 0
               waitAfterCompletion: forever
           services:
@@ -96,7 +122,7 @@ Resources:
     DependsOn: Ec2Instance
     Properties:
       Handle: !Ref WaitConditionHandle
-      Timeout: 3600
+      Timeout: 300
 
 Outputs:
   Address:
