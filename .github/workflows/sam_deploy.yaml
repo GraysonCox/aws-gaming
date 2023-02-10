@@ -13,13 +13,13 @@ on:
         type: string
         required: true
     secrets:
-      aws_access_key_id:
+      AWS_ACCESS_KEY_ID:
         required: true
-      aws_secret_access_key:
+      AWS_SECRET_ACCESS_KEY:
         required: true
-      aws_region:
+      AWS_REGION:
         required: true
-      windows_password:
+      WINDOWS_PASSWORD:
         required: true
 
 jobs:
@@ -31,15 +31,15 @@ jobs:
       - uses: aws-actions/setup-sam@v2
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.aws_access_key_id }}
-          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
-          aws-region: ${{ secrets.aws_region }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - run: |
           sam deploy \
             --stack-name ${{ inputs.stack_name }} \
-            --region ${{ secrets.aws_region }} \
+            --region ${{ secrets.AWS_REGION }} \
             --parameter-overrides \
               InstanceType=${{ inputs.instance_type }} \
               WindowsUsername=${{ inputs.windows_username }} \
-              WindowsPassword=${{ secrets.windows_password }}
+              WindowsPassword=${{ secrets.WINDOWS_PASSWORD }}

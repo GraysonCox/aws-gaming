@@ -26,11 +26,7 @@ jobs:
       stack_name: little-jimmy
       instance_type: g4ad.xlarge
       windows_username: Gary
-    secrets:
-      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws_region: ${{ secrets.AWS_REGION }}
-      windows_password: ${{ secrets.WINDOWS_PASSWORD }}
+    secrets: inherit
 
   deploy_jimmy:
     needs: verify
@@ -41,11 +37,7 @@ jobs:
       stack_name: jimmy
       instance_type: g4ad.2xlarge
       windows_username: Gary
-    secrets:
-      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws_region: ${{ secrets.AWS_REGION }}
-      windows_password: ${{ secrets.WINDOWS_PASSWORD }}
+    secrets: inherit
 
   deploy_big_jimmy:
     needs: verify
@@ -56,8 +48,4 @@ jobs:
       stack_name: big-jimmy
       instance_type: g4ad.4xlarge
       windows_username: Gary
-    secrets:
-      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws_region: ${{ secrets.AWS_REGION }}
-      windows_password: ${{ secrets.WINDOWS_PASSWORD }}
+    secrets: inherit
