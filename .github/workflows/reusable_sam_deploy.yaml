@@ -1,4 +1,4 @@
-name: SAM Deploy
+name: Reusable > SAM Deploy
 
 on:
   workflow_call:
@@ -24,7 +24,6 @@ on:
 
 jobs:
   deploy:
-    name: SAM Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -1,17 +1,15 @@
-name: Verify
+name: Reusable > Verify
 
 on: [push, workflow_call]
 
 jobs:
   lint:
-    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: scottbrenner/cfn-lint-action@v2
 
-      - name: Lint
-        run: |
+      - run: |
           cfn-lint \
             --ignore-checks W3002 \
             --template **/*template.yaml
