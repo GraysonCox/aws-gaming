@@ -6,12 +6,6 @@ on:
       stack_name:
         type: string
         required: true
-      instance_type:
-        type: string
-        required: true
-      windows_username:
-        type: string
-        required: true
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
