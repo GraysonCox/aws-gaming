@@ -42,4 +42,4 @@ jobs:
             --parameter-overrides \
               InstanceType=${{ inputs.instance_type }} \
               WindowsUsername=${{ inputs.windows_username }} \
-              WindowsPassword=${{ inputs.windows_password }}
+              WindowsPassword=${{ secrets.windows_password }}
