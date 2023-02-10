@@ -5,19 +5,22 @@ on:
     inputs:
       stack_name:
         type: string
+        required: true
       instance_type:
         type: string
+        required: true
       windows_username:
         type: string
+        required: true
     secrets:
       aws_access_key_id:
-        type: string
+        required: true
       aws_secret_access_key:
-        type: string
+        required: true
       aws_region:
-        type: string
+        required: true
       windows_password:
-        type: string
+        required: true
 
 jobs:
   deploy:
