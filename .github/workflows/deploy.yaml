@@ -23,5 +23,6 @@ jobs:
       - name: Deploy
         run: |
           sam deploy --parameter-overrides \
+            InstanceType=g4ad.xlarge \
             WindowsUsername=Gary \
             WindowsPassword=${{ secrets.WINDOWS_PASSWORD }}
