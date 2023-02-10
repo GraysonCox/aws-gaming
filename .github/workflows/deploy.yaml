@@ -37,7 +37,7 @@ jobs:
     with:
       stack_name: jimmy
       region: us-east-1
-      instance_type: g4ad.xlarge
+      instance_type: g4ad.2xlarge
       windows_username: Gary
       windows_password: ${{ secrets.WINDOWS_PASSWORD }}
 
