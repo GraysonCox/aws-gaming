@@ -24,9 +24,12 @@ jobs:
     uses: ./.github/workflows/sam_deploy.yaml
     with:
       stack_name: little-jimmy
-      region: us-east-1
       instance_type: g4ad.xlarge
       windows_username: Gary
+    secrets:
+      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws_region: ${{ secrets.AWS_REGION }}
       windows_password: ${{ secrets.WINDOWS_PASSWORD }}
 
   deploy_jimmy:
@@ -36,9 +39,12 @@ jobs:
     uses: ./.github/workflows/sam_deploy.yaml
     with:
       stack_name: jimmy
-      region: us-east-1
       instance_type: g4ad.2xlarge
       windows_username: Gary
+    secrets:
+      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws_region: ${{ secrets.AWS_REGION }}
       windows_password: ${{ secrets.WINDOWS_PASSWORD }}
 
   deploy_big_jimmy:
@@ -48,7 +54,10 @@ jobs:
     uses: ./.github/workflows/sam_deploy.yaml
     with:
       stack_name: big-jimmy
-      region: us-east-1
       instance_type: g4ad.4xlarge
       windows_username: Gary
+    secrets:
+      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws_region: ${{ secrets.AWS_REGION }}
       windows_password: ${{ secrets.WINDOWS_PASSWORD }}

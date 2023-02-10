@@ -5,11 +5,16 @@ on:
     inputs:
       stack_name:
         type: string
-      region:
-        type: string
       instance_type:
         type: string
       windows_username:
+        type: string
+    secrets:
+      aws_access_key_id:
+        type: string
+      aws_secret_access_key:
+        type: string
+      aws_region:
         type: string
       windows_password:
         type: string
@@ -23,14 +28,14 @@ jobs:
       - uses: aws-actions/setup-sam@v2
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.aws_access_key_id }}
+          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+          aws-region: ${{ secrets.aws_region }}
 
       - run: |
           sam deploy \
             --stack-name ${{ inputs.stack_name }} \
-            --region ${{ inputs.region }} \
+            --region ${{ secrets.aws_region }} \
             --parameter-overrides \
               InstanceType=${{ inputs.instance_type }} \
               WindowsUsername=${{ inputs.windows_username }} \
