@@ -45,7 +45,7 @@ jobs:
     if: ${{ inputs.deploy_machine_1 }}
     uses: ./.github/workflows/reusable_deploy.yaml
     with:
-      stack_name: machine_1
+      stack_name:machine-1
       instance_type: ${{ inputs.instance_type }}
       windows_username: Gamer
     secrets: inherit
@@ -55,7 +55,7 @@ jobs:
     if: ${{ inputs.deploy_machine_2 }}
     uses: ./.github/workflows/reusable_deploy.yaml
     with:
-      stack_name: machine_2
+      stack_name:machine-2
       instance_type: ${{ inputs.instance_type }}
       windows_username: Gamer
     secrets: inherit
@@ -65,7 +65,7 @@ jobs:
     if: ${{ inputs.deploy_machine_3 }}
     uses: ./.github/workflows/reusable_deploy.yaml
     with:
-      stack_name: machine_3
+      stack_name:machine-3
       instance_type: ${{ inputs.instance_type }}
       windows_username: Gamer
     secrets: inherit
@@ -75,7 +75,7 @@ jobs:
     if: ${{ inputs.deploy_machine_4 }}
     uses: ./.github/workflows/reusable_deploy.yaml
     with:
-      stack_name: machine_4
+      stack_name:machine-4
       instance_type: ${{ inputs.instance_type }}
       windows_username: Gamer
     secrets: inherit
@@ -85,7 +85,7 @@ jobs:
     if: ${{ inputs.deploy_machine_5 }}
     uses: ./.github/workflows/reusable_deploy.yaml
     with:
-      stack_name: machine_5
+      stack_name:machine-5
       instance_type: ${{ inputs.instance_type }}
       windows_username: Gamer
     secrets: inherit
@@ -95,7 +95,7 @@ jobs:
     if: ${{ inputs.deploy_machine_6 }}
     uses: ./.github/workflows/reusable_deploy.yaml
     with:
-      stack_name: machine_6
+      stack_name:machine-6
       instance_type: ${{ inputs.instance_type }}
       windows_username: Gamer
     secrets: inherit
@@ -105,7 +105,7 @@ jobs:
     if: ${{ inputs.deploy_machine_7 }}
     uses: ./.github/workflows/reusable_deploy.yaml
     with:
-      stack_name: machine_7
+      stack_name:machine-7
       instance_type: ${{ inputs.instance_type }}
       windows_username: Gamer
     secrets: inherit
@@ -115,7 +115,7 @@ jobs:
     if: ${{ inputs.deploy_machine_8 }}
     uses: ./.github/workflows/reusable_deploy.yaml
     with:
-      stack_name: machine_8
+      stack_name:machine-8
       instance_type: ${{ inputs.instance_type }}
       windows_username: Gamer
     secrets: inherit
