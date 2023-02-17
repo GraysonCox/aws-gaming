@@ -1,5 +1,7 @@
 ---
 
+Description: This template can spin up a sick cloud gaming rig that is accessible via an RDP client.
+
 Parameters:
   InstanceType:
     Type: String
@@ -9,10 +11,13 @@ Parameters:
       - g4ad.4xlarge
       - g4ad.8xlarge
       - g4ad.16xlarge
+    Description: The desired instance type.
   WindowsUsername:
     Type: String
+    Description: The username with which you will be able to log in to the machine.
     NoEcho: true
   WindowsPassword:
+    Description: The password with which you will be able to log in to the machine.
     Type: String
     NoEcho: true
 
@@ -120,10 +125,13 @@ Resources:
           !Sub
             - |
               <powershell>
+
               cmd.exe /c net user /add ${username} ${password}
               cmd.exe /c net localgroup administrators ${username} /add
+
               cmd.exe /c cfn-init.exe -v -s ${stack_id} -r Ec2Instance --region ${region}
               cmd.exe /c cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
+
               </powershell>
             - username: !Ref WindowsUsername
               password: !Ref WindowsPassword
