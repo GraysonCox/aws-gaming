@@ -29,9 +29,6 @@ on:
         default: false
 
 jobs:
-  verify:
-    uses: ./.github/workflows/reusable_verify.yaml
-
   destroy_machine_1:
     needs: verify
     if: ${{ inputs.destroy_machine_1 }}
