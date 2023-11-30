@@ -5,7 +5,7 @@ name: Reusable > Deploy
 env:
   AWS_REGION: us-east-1
 
-on:
+"on":
   workflow_call:
     inputs:
       stack_name:

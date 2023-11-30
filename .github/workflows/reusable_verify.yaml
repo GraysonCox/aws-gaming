@@ -2,7 +2,7 @@
 
 name: Reusable > Verify
 
-on: [push, workflow_call]
+"on": [push, workflow_call]
 
 jobs:
   cfn-lint:

@@ -2,7 +2,7 @@
 
 name: Destroy
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       destroy_machine_1:
