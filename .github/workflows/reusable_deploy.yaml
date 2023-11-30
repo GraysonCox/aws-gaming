@@ -15,12 +15,6 @@ name: Reusable > Deploy
         type: string
         required: true
     secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
-      AWS_REGION:
-        required: true
       WINDOWS_PASSWORD:
         required: true
 
