@@ -1,3 +1,5 @@
+---
+
 name: Reusable > Verify
 
 on: [push, workflow_call]
@@ -8,17 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: scottbrenner/cfn-lint-action@v2
-      - name: cfn-lint
-        run: |
-          cfn-lint \
-            --ignore-checks W3002 \
-            --template **/template*.yaml
+      - run: cfn-lint
 
   yamllint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: yamllint
-        uses: karancode/yamllint-github-action@master
+      - uses: karancode/yamllint-github-action@master
         with:
           yamllint_strict: true
