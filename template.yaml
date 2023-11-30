@@ -40,7 +40,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 3389
           ToPort: 3389
-          CidrIp: 0.0.0.0/0 # This is bad.
+          CidrIp: 0.0.0.0/0  # This is bad.
 
   ElasticIp:
     Type: AWS::EC2::EIP
