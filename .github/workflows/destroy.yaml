@@ -1,6 +1,8 @@
+---
+
 name: Destroy
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       destroy_machine_1:
@@ -35,7 +37,6 @@ jobs:
     uses: ./.github/workflows/reusable_destroy.yaml
     with:
       stack_name: machine-1
-    secrets: inherit
 
   destroy_machine_2:
     needs: verify
@@ -43,7 +44,6 @@ jobs:
     uses: ./.github/workflows/reusable_destroy.yaml
     with:
       stack_name: machine-2
-    secrets: inherit
 
   destroy_machine_3:
     needs: verify
@@ -51,7 +51,6 @@ jobs:
     uses: ./.github/workflows/reusable_destroy.yaml
     with:
       stack_name: machine-3
-    secrets: inherit
 
   destroy_machine_4:
     needs: verify
@@ -59,7 +58,6 @@ jobs:
     uses: ./.github/workflows/reusable_destroy.yaml
     with:
       stack_name: machine-4
-    secrets: inherit
 
   destroy_machine_5:
     needs: verify
@@ -67,7 +65,6 @@ jobs:
     uses: ./.github/workflows/reusable_destroy.yaml
     with:
       stack_name: machine-5
-    secrets: inherit
 
   destroy_machine_6:
     needs: verify
@@ -75,7 +72,6 @@ jobs:
     uses: ./.github/workflows/reusable_destroy.yaml
     with:
       stack_name: machine-6
-    secrets: inherit
 
   destroy_machine_7:
     needs: verify
@@ -83,7 +79,6 @@ jobs:
     uses: ./.github/workflows/reusable_destroy.yaml
     with:
       stack_name: machine-7
-    secrets: inherit
 
   destroy_machine_8:
     needs: verify
@@ -91,4 +86,3 @@ jobs:
     uses: ./.github/workflows/reusable_destroy.yaml
     with:
       stack_name: machine-8
-    secrets: inherit

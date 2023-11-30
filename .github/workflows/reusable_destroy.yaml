@@ -1,18 +1,20 @@
+---
+
 name: Reusable > Destroy
 
-on:
+"on":
   workflow_call:
     inputs:
       stack_name:
         type: string
         required: true
-    secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
-      AWS_REGION:
-        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
 
 jobs:
   destroy:
@@ -20,11 +22,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: aws-actions/setup-sam@v2
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: arn:aws:iam::840116000641:role/GitHub
+          aws-region: ${{env.AWS_REGION}}
 
       - run: |
           aws cloudformation delete-stack --stack-name=${{ inputs.stack_name }}

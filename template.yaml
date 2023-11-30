@@ -40,7 +40,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 3389
           ToPort: 3389
-          CidrIp: 0.0.0.0/0 # This is bad.
+          CidrIp: 0.0.0.0/0  # This is bad.
 
   ElasticIp:
     Type: AWS::EC2::EIP
@@ -118,20 +118,20 @@ Resources:
       UserData:
         Fn::Base64:
           !Sub
-            - |
-              <powershell>
-              cmd.exe /c net user /add ${username} ${password}
-              cmd.exe /c net localgroup administrators ${username} /add
-              cmd.exe /c cfn-init.exe -v -s ${stack_id} -r Ec2Instance --region ${region}
-              cmd.exe /c cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
-              </powershell>
-            - username: !Ref WindowsUsername
-              password: !Ref WindowsPassword
-              stack_id: !Ref AWS::StackId
-              region: !Ref AWS::Region
-              wait_condition_handle:
-                Fn::Base64:
-                  !Ref Ec2InstanceWaitConditionHandle
+          - |
+            <powershell>
+            cmd.exe /c net user /add ${username} ${password}
+            cmd.exe /c net localgroup administrators ${username} /add
+            cmd.exe /c cfn-init.exe -v -s ${stack_id} -r Ec2Instance --region ${region}
+            cmd.exe /c cfn-signal.exe -e %ERRORLEVEL% ${wait_condition_handle}
+            </powershell>
+          - username: !Ref WindowsUsername
+            password: !Ref WindowsPassword
+            stack_id: !Ref AWS::StackId
+            region: !Ref AWS::Region
+            wait_condition_handle:
+              Fn::Base64:
+                !Ref Ec2InstanceWaitConditionHandle
 
   Ec2InstanceWaitConditionHandle:
     Type: AWS::CloudFormation::WaitConditionHandle
