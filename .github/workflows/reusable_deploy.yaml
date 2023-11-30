@@ -2,9 +2,6 @@
 
 name: Reusable > Deploy
 
-env:
-  AWS_REGION: us-east-1
-
 "on":
   workflow_call:
     inputs:
@@ -26,6 +23,13 @@ env:
         required: true
       WINDOWS_PASSWORD:
         required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
 
 jobs:
   deploy:
