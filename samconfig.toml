@@ -8,3 +8,4 @@ tags = "project=aws-gaming"
 image_repositories = []
 resolve_s3 = true
 fail_on_empty_changeset = false
+s3_prefix = "aws-gaming"
